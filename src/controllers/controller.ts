@@ -48,6 +48,7 @@ const main = async (argumentos: string[], accion: string, productos: any[]) => {
         name: argumentos[3],
         price: Number(argumentos[4]),
       });
+      await producto.save();
       console.log(producto);
       break;
 
@@ -56,6 +57,15 @@ const main = async (argumentos: string[], accion: string, productos: any[]) => {
       console.log(eliminar);
       break;
 
+    case "actualizar":
+      const actualizar = await Product.updateOne({ name: argumentos[3] }, { price: Number(argumentos[4]) });
+      console.log(actualizar);
+      break;
+
+    case "buscar":
+      const buscar = await Product.findOne({ name: argumentos[3] });
+      console.log(buscar);
+      break;
 
 
   }
