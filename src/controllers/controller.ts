@@ -16,19 +16,11 @@ const connectDB = async (URI: string) => {
 interface ProductoInterface {
   name: string;
   price: number;
-  description: string;
-  image: string;
-  category: string;
-  quantity: number;
 }
 
 const ProductSchema = new Schema<ProductoInterface>({
-  name: String,
-  price: Number,
-  description: String,
-  image: String,
-  category: String,
-  quantity: Number,
+  name: { type: String, required: true, unique: true },
+  price: { type: Number, required: true }
 }, { timestamps: true, versionKey: false });
 
 const Product = mongoose.model("Product", ProductSchema);
@@ -43,7 +35,16 @@ const main = async (argumentos: string[], accion: string, usuarios: any[]) => {
         { accion: "eliminar", descripcion: "Eliminar un producto por nombre" },
         { accion: "actualizar", descripcion: "Actualizar un producto por nombre" },
         { accion: "buscar", descripcion: "Buscar un producto por nombre" },
-      ])
+      ]);
+      break;
+
+    case "listar":
+      const productos = await Product.find();
+      console.table(productos);
+      break;
+
+
+
   }
 }
 export { main }
