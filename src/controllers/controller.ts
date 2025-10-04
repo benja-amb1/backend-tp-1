@@ -43,7 +43,13 @@ const main = async (argumentos: string[], accion: string, usuarios: any[]) => {
       console.table(productos);
       break;
 
-
+    case "agregar":
+      const producto = await Product.create({
+        name: argumentos[3],
+        price: Number(argumentos[4]),
+      });
+      console.log(producto);
+      break;
 
   }
 }
