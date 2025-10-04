@@ -25,7 +25,7 @@ const ProductSchema = new Schema<ProductoInterface>({
 
 const Product = mongoose.model("Product", ProductSchema);
 
-const main = async (argumentos: string[], accion: string, usuarios: any[]) => {
+const main = async (argumentos: string[], accion: string, productos: any[]) => {
   connectDB(URI_DB);
   switch (accion) {
     case "help":
@@ -50,6 +50,13 @@ const main = async (argumentos: string[], accion: string, usuarios: any[]) => {
       });
       console.log(producto);
       break;
+
+    case "eliminar":
+      const eliminar = await Product.deleteOne({ name: argumentos[3] });
+      console.log(eliminar);
+      break;
+
+
 
   }
 }
