@@ -2,7 +2,7 @@
 
 import mongoose, { Schema } from 'mongoose'
 
-const URI_DB = "mongodb://localhost:27017/db_mongo_utn";
+const URI_DB = "mongodb://localhost:27017/backend-tp-1";
 
 const connectDB = async (URI: string) => {
   try {
@@ -40,6 +40,10 @@ const main = async (argumentos: string[], accion: string, productos: any[]) => {
 
     case "listar":
       const productos = await Product.find();
+      if (productos.length === 0) {
+        console.log("No hay productos");
+        break;
+      }
       console.table(productos);
       break;
 
@@ -48,26 +52,66 @@ const main = async (argumentos: string[], accion: string, productos: any[]) => {
         name: argumentos[3],
         price: Number(argumentos[4]),
       });
+      if (!producto) {
+        console.log("No se pudo agregar el producto");
+        break;
+      }
+
+      if (!argumentos[3] || !argumentos[4]) {
+        console.log("Todos los campos son obligatorios");
+        break;
+      }
+
       await producto.save();
       console.log(producto);
       break;
 
     case "eliminar":
       const eliminar = await Product.deleteOne({ name: argumentos[3] });
+      if (!eliminar) {
+        console.log("No se pudo eliminar el producto");
+        break;
+      }
+
+      if (!argumentos[3]) {
+        console.log("Todos los campos son obligatorios");
+        break;
+      }
+
       console.log(eliminar);
       break;
 
     case "actualizar":
       const actualizar = await Product.updateOne({ name: argumentos[3] }, { price: Number(argumentos[4]) });
+      if (!actualizar) {
+        console.log("No se pudo actualizar el producto");
+        break;
+      }
+
+      if (!argumentos[3] || !argumentos[4]) {
+        console.log("Todos los campos son obligatorios");
+        break;
+      }
+
       console.log(actualizar);
       break;
 
     case "buscar":
       const buscar = await Product.findOne({ name: argumentos[3] });
+
+      if (!buscar) {
+        console.log("No se pudo buscar el producto");
+        break;
+      }
+
+      if (!argumentos[3]) {
+        console.log("Todos los campos son obligatorios");
+        break;
+      }
       console.log(buscar);
       break;
-
-
   }
+
+  process.exit(1);
 }
 export { main }
