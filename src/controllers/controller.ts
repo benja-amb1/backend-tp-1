@@ -25,7 +25,7 @@ const ProductSchema = new Schema<ProductoInterface>({
 
 const Product = mongoose.model("Product", ProductSchema);
 
-const main = async (argumentos: string[], accion: string, productos: any[]) => {
+const main = async (argumentos: string[], accion: string) => {
   connectDB(URI_DB);
   switch (accion) {
     case "help":
@@ -44,13 +44,13 @@ const main = async (argumentos: string[], accion: string, productos: any[]) => {
         console.log("No hay productos");
         break;
       }
-      console.table(productos);
+      console.log(productos);
       break;
 
     case "agregar":
       const producto = await Product.create({
         name: argumentos[3],
-        price: Number(argumentos[4]),
+        price: +argumentos[4],
       });
       if (!producto) {
         console.log("No se pudo agregar el producto");
@@ -82,13 +82,14 @@ const main = async (argumentos: string[], accion: string, productos: any[]) => {
       break;
 
     case "actualizar":
-      const actualizar = await Product.updateOne({ name: argumentos[3] }, { price: Number(argumentos[4]) });
+      const actualizar = await Product.updateOne({ name: argumentos[3] }, { name: argumentos[4], price: +argumentos[5] });
+
       if (!actualizar) {
         console.log("No se pudo actualizar el producto");
         break;
       }
 
-      if (!argumentos[3] || !argumentos[4]) {
+      if (!argumentos[3] || !argumentos[4] || !argumentos[5]) {
         console.log("Todos los campos son obligatorios");
         break;
       }
